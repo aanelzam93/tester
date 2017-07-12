@@ -1,0 +1,30 @@
+<head>
+  <script type="text/javascript" src="http://localhost:8080/socket.io/socket.io.js"></script>
+</head>
+  <body>
+    <script>
+    var socket = null;
+try {	
+  socket = io.connect();
+     console.log("socket: Ok!");
+    }
+catch(err) {
+  console.error("Socket is out of service!");
+}	
+if(socket != null) {
+  socket.emit('new_client', 'admin');
+  // use variable php (COOKIES, SESSION...)	
+  socket.on('message', function(data) {	
+    $('#zone_chat').prepend('' + data.pseudo + ': ' + data.message + '<br />');
+  });	
+  socket.on('new_client', function(pseudo) {	
+    $('#zone_chat').prepend('<em>' + pseudo + ' a rejoint le chat !</em><br />');
+  });	
+  socket.on('moveObjet', function(data) {
+    mesh = scene.getMeshByName(data.name);
+    mesh.position = new BABYLON.Vector3(data.position);		
+    mesh.rotation = new BABYLON.Vector3(data.rotation);	
+  });
+}
+</script>
+</body>
